@@ -77,7 +77,7 @@ class Register extends Component {
       .catch((error) => {
         console.log(error.status);
         if (error.response.status === 403) {
-          toast.error("User with this username already exists");
+          toast.error(error.response.data);
         } else {
           window.location.href = "http://localhost:3000/badrequest";
         }

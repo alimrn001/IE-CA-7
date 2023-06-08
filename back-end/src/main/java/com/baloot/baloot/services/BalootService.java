@@ -89,7 +89,6 @@ public class BalootService {
         boolean readData = true;
         if(! commodityRepository.findAll().isEmpty()) {
             readData = false;
-//            return;
         }
         try {
             if(readData) {
@@ -101,8 +100,8 @@ public class BalootService {
                 retrieveDiscountsDataFromAPI(discountCouponsAddr);
             }
             else {
-//                retrieveCommentsDataFromAPI(commentsAddr);
-//                retrieveDiscountsDataFromAPI(discountCouponsAddr);
+                //retrieveCommentsDataFromAPI(commentsAddr);
+                //retrieveDiscountsDataFromAPI(discountCouponsAddr);
             }
         }
         catch (Exception e) {
@@ -337,7 +336,18 @@ public class BalootService {
     public void login(String username, String password) throws Exception {
         if(username==null || password==null)
             throw new ForbiddenValueException();
-        User user = userRepository.getUserByUsername(username);
+        User user = getUserByUsername(username);
+        if(user==null)
+            throw new LoginFailedException();
+        if(!HashString.checkPassword(password, user.getPassword()))
+            throw new LoginFailedException();
+        loggedInUser = user;
+    }
+
+    public void loginByEmail(String email, String password) throws Exception {
+        if(email==null || password==null)
+            throw new ForbiddenValueException();
+        User user = getUserByEmail(email);
         if(user==null)
             throw new LoginFailedException();
         if(!HashString.checkPassword(password, user.getPassword()))

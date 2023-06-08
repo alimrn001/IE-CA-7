@@ -1,4 +1,6 @@
 package com.baloot.baloot.services.authentication;
+import com.baloot.baloot.Exceptions.EmailAlreadyExistsException;
+import com.baloot.baloot.Exceptions.UsernameAlreadyExistsException;
 import com.baloot.baloot.services.BalootService;
 import com.baloot.baloot.Exceptions.ForbiddenValueException;
 import com.baloot.baloot.Exceptions.UserAlreadyExistsException;
@@ -13,8 +15,10 @@ public class RegisterService {
     BalootService balootService;
 
     public void registerUser(String username, String password, String email, String birthdate, String address) throws Exception {
-        if(balootService.usernameExists(username) || balootService.emailExists(email))
-            throw new UserAlreadyExistsException();
+        if(balootService.usernameExists(username))
+            throw new UsernameAlreadyExistsException();
+        if(balootService.emailExists(email))
+            throw new EmailAlreadyExistsException();
         try {
             balootService.addUser(username, password, birthdate, email, address);
             balootService.login(username, password);
