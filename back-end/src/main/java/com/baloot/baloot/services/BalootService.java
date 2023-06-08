@@ -12,6 +12,7 @@ import com.baloot.baloot.Repository.Rating.RatingRepository;
 import com.baloot.baloot.Repository.User.UserRepository;
 
 import com.baloot.baloot.Exceptions.*;
+import com.baloot.baloot.Utils.HashString;
 import com.baloot.baloot.domain.Baloot.Utilities.EmailParser;
 import com.baloot.baloot.domain.Baloot.Utilities.LocalDateAdapter;
 
@@ -115,6 +116,7 @@ public class BalootService {
         Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
         List<User> userList = gson.fromJson(userDataJsonStr, userListType);
         for (User user : userList) {
+            user.setPassword(HashString.hashString(user.getPassword()));
             userRepository.save(user);
         }
     }
@@ -317,7 +319,8 @@ public class BalootService {
     public void addUser(String username, String password, String birthDate, String email, String address) throws Exception {
         checkUsernameValidity(username);
         LocalDate birth = LocalDate.parse(birthDate);
-        User user = new User(username, password, birth, email, address, 0);
+        String hashedPassword = HashString.hashString(password);
+        User user = new User(username, hashedPassword, birth, email, address, 0);
         userRepository.save(user);
     }
 
@@ -337,7 +340,7 @@ public class BalootService {
         User user = userRepository.getUserByUsername(username);
         if(user==null)
             throw new LoginFailedException();
-        if(!password.equals(user.getPassword()))
+        if(!HashString.checkPassword(password, user.getPassword()))
             throw new LoginFailedException();
         loggedInUser = user;
     }

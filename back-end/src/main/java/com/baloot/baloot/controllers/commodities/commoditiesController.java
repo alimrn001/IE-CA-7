@@ -9,7 +9,7 @@ import com.baloot.baloot.Exceptions.CommodityNotExistsException;
 import com.baloot.baloot.Exceptions.ItemNotAvailableInStockException;
 import com.baloot.baloot.Exceptions.NoLoggedInUserException;
 import com.baloot.baloot.Exceptions.RatingOutOfRangeException;
-//import com.baloot.baloot.domain.Baloot.Provider.Provider;
+
 import com.baloot.baloot.models.Provider.Provider;
 import com.baloot.baloot.services.buylists.BuyListService;
 import com.baloot.baloot.services.comments.CommentService;
