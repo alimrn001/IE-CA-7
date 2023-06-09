@@ -13,6 +13,7 @@ import com.baloot.baloot.Repository.User.UserRepository;
 
 import com.baloot.baloot.Exceptions.*;
 import com.baloot.baloot.Utils.HashString;
+import com.baloot.baloot.Utils.JWTUtils;
 import com.baloot.baloot.domain.Baloot.Utilities.EmailParser;
 import com.baloot.baloot.domain.Baloot.Utilities.LocalDateAdapter;
 
@@ -344,7 +345,11 @@ public class BalootService {
         loggedInUser = user;
     }
 
-    public void loginByEmail(String email, String password) throws Exception {
+    public void loginWithJwtToken(String userEmail) {
+        this.loggedInUser = userRepository.getUserByEmail(userEmail); //handling null exception ??
+    }
+
+    public String loginByEmail(String email, String password) throws Exception {
         if(email==null || password==null)
             throw new ForbiddenValueException();
         User user = getUserByEmail(email);
@@ -353,6 +358,7 @@ public class BalootService {
         if(!HashString.checkPassword(password, user.getPassword()))
             throw new LoginFailedException();
         loggedInUser = user;
+        return JWTUtils.createJWTToken(email);
     }
 
     public void logout() {
