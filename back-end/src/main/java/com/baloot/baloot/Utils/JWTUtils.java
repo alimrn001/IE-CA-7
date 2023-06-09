@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class JWTUtils {
 
-    public static String signKey = "baloot2023";
+    public static String signKey = "--------------baloot2023--------------";
 
     public static String createJWTToken(String userEmail) {
 //        String signKey = "baloot2023";

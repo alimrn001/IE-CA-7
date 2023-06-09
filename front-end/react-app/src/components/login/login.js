@@ -42,15 +42,24 @@ class Login extends Component {
 
     event.preventDefault();
 
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
     axios
-      .post("/login", {
-        username: this.state.username,
-        password: this.state.password,
-      })
+      .post(
+        "/login",
+        {
+          username: this.state.username,
+          password: this.state.password,
+        },
+        { headers }
+      )
       .then((resp) => {
         if (resp.status === 200) {
-          console.log("successfull");
-          window.location.href = "http://localhost:3000/";
+          console.log(resp.headers.authorization);
+          console.log(resp.headers.useremail);
+          // window.location.href = "http://localhost:3000/";
         }
       })
       .catch((error) => {
@@ -89,10 +98,10 @@ class Login extends Component {
               onSubmit={this.handleSubmit}
             >
               <div className="form-group">
-                <label>Username</label>
+                <label>Email</label>
                 <input
                   name="username"
-                  type="text"
+                  type="email"
                   className="form-control form-field"
                   // value={this.state.username || ''}
                   onChange={this.handleUsernameChange}
