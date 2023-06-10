@@ -76,6 +76,7 @@ public class CallbackController {
 
         // Use the access token to get user info from GitHub API
         if (accessToken != null) {
+            System.out.println("having access token");
             String userInfoUrl = "https://api.github.com/user";
             HttpRequest userInfoRequest = HttpRequest.newBuilder()
                     .uri(URI.create(userInfoUrl))
@@ -88,20 +89,26 @@ public class CallbackController {
 
             // Parse the user info and do something with it
             JsonObject userInfoObject = JsonParser.parseString(userInfoResponseBody).getAsJsonObject();
-            String email = userInfoObject.get("email").getAsString();
+//            String email = userInfoObject.get("email").getAsString();
             String username = userInfoObject.get("login").getAsString();
             String name = userInfoObject.get("name").getAsString(); // not needed here
             String bday = userInfoObject.get("created_at").getAsString();
             Calendar cal = parseDateTime(bday);
             cal.add(Calendar.YEAR, -18);
             Date date = cal.getTime();
-            String birthdate = new SimpleDateFormat("yyyy/MM/dd").format(date).toString();
+            String birthdate = new SimpleDateFormat("yyyy-MM-dd").format(date).toString();
+
+            String email = username + "@gmail.com";//comment it if issue with email is fixed
+            System.out.println(username);
+            System.out.println(name);
+            System.out.println(birthdate);
+            System.out.println(bday);
             try {
                 registerService.registerUser(username, defaultOAuthPass, email, birthdate, defaultOAuthAddress);
             }
             catch (UsernameAlreadyExistsException | EmailAlreadyExistsException e) {
                 try {
-                    balootService.updateUser(username, defaultOAuthPass, email, birthdate, defaultOAuthAddress);
+                    balootService.updateUser(username, defaultOAuthPass, birthdate, email, defaultOAuthAddress);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -109,9 +116,11 @@ public class CallbackController {
             catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println(balootService.getUserByEmail(email).getAddress());
             balootService.loginWithJwtToken(email);
             // Return a response to the client
             String jwtToken = JWTUtils.createJWTToken(email);
+            System.out.println("token is : " + jwtToken);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Bearer " + jwtToken);
             headers.add("userEmail", email);

@@ -16,6 +16,10 @@ public class JWTUtils {
 
     public static String createJWTToken(String userEmail) {
 
+        if(userEmail == null) {
+            System.out.println("NULL");
+        }
+        System.out.println(userEmail + " is email");
 //        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(hmac_secret_key), SignatureAlgorithm.HS256.getJcaName());
 
         SecretKey signature_type = new SecretKeySpec(signKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
@@ -28,6 +32,7 @@ public class JWTUtils {
                 .setExpiration(Date.from(Instant.now().plus(24, ChronoUnit.HOURS))) // exp claim
                 .signWith(signature_type)
                 .compact();
+//        System.out.println("token is : " + jwt_token);
         return jwt_token;
     }
 

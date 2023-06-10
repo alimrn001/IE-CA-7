@@ -24,9 +24,10 @@ class Callback extends React.Component {
     axios
       .get("/callback", { params: req })
       .then((response) => {
-        let userJWT = response.headers.token;
+        let userJWT = response.headers.authorization.split(" ")[1];
         let userEmail = response.headers.useremail;
-        AuthenticationService.setUser(userJWT, userEmail);
+        localStorage.setItem("userJWT", userJWT);
+        localStorage.setItem("userEmail", userEmail);
         window.location.replace("/");
       })
       .catch(console.error)
