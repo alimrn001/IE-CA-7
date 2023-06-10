@@ -14,14 +14,14 @@ public class RegisterService {
     @Autowired
     BalootService balootService;
 
-    public void registerUser(String username, String password, String email, String birthdate, String address) throws Exception {
+    public String registerUser(String username, String password, String email, String birthdate, String address) throws Exception {
         if(balootService.usernameExists(username))
             throw new UsernameAlreadyExistsException();
         if(balootService.emailExists(email))
             throw new EmailAlreadyExistsException();
         try {
             balootService.addUser(username, password, birthdate, email, address);
-            balootService.login(username, password);
+            return balootService.loginByEmail(email, password);
         }
         catch (DateTimeParseException e) {
             throw new ForbiddenValueException();

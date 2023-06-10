@@ -59,18 +59,31 @@ class Register extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const headers = {
+      "Content-Type": "application/json",
+    };
 
     axios
-      .post("/register", {
-        username: this.state.username,
-        password: this.state.password,
-        email: this.state.email,
-        birthday: this.state.birthday,
-        address: this.state.address,
-      })
+      .post(
+        "/register",
+        {
+          username: this.state.username,
+          password: this.state.password,
+          email: this.state.email,
+          birthday: this.state.birthday,
+          address: this.state.address,
+        },
+        { headers }
+      )
       .then((resp) => {
         if (resp.status === 200) {
-          console.log("successfull");
+          console.log(resp.headers.authorization.split(" ")[1]);
+          console.log(resp.headers.useremail);
+          localStorage.setItem(
+            "userJWT",
+            resp.headers.authorization.split(" ")[1]
+          );
+          localStorage.setItem("userEmail", resp.headers.useremail);
           window.location.href = "http://localhost:3000/";
         }
       })

@@ -28,13 +28,11 @@ public class LoginController {
             headers.add("Authorization", "Bearer " + jwtToken);
             headers.add("userEmail", payLoad.get("username").toString());
             headers.setAccessControlExposeHeaders(Arrays.asList("Authorization", "userEmail"));
-//            return new ResponseEntity<>(map,HttpStatus.OK);
             return ResponseEntity.ok().headers(headers).build();
         }
         catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 
