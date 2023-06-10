@@ -7,12 +7,12 @@ import com.baloot.baloot.models.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface BuyListItemRepository extends JpaRepository<BuyListItem, Long> {
-
-//    List<BuyListItem> findByBuyList(BuyList buyList);
 
     List<BuyListItem> findByUser_Username(String username);
 
@@ -20,13 +20,5 @@ public interface BuyListItemRepository extends JpaRepository<BuyListItem, Long> 
     List<BuyListItem> findByBuyList(@Param("buyList") BuyList buyList);
 
     BuyListItem getBuyListItemByUserAndCommodityAndBuyList(User user, Commodity commodity, BuyList buyList);
-
-//    default String getUsernameByBuyListId(Long buyListId) {
-//        BuyList buyList = buyListRepository.getBuyListByBuyListId(buyListId);
-//        if (buyList != null && buyList.getUser() != null) {
-//            return buyList.getUser().getUsername();
-//        }
-//        return null;
-//    }
 
 }

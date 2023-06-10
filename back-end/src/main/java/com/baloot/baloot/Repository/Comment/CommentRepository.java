@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     Comment getCommentByCommentId(int commentId);

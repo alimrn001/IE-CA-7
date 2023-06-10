@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public interface ProviderRepository extends JpaRepository<Provider, Integer> {
 
     List<Provider> findProvidersByNameContaining(String providerName);
