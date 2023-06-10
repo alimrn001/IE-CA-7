@@ -62,7 +62,9 @@ class User extends Component {
 
   getUserData() {
     axios
-      .get("/user")
+      .get("/user", {
+        headers: { Authorization: localStorage.getItem("userJWT") },
+      })
       .then((resp) => {
         console.log(resp.status);
         if (resp.status === 200) {
@@ -152,14 +154,19 @@ class User extends Component {
   }
 
   componentDidMount() {
-    this.getUserData();
-    toast.configure({
-      rtl: true,
-      className: "text-center",
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 5000,
-      closeOnClick: true,
-    });
+    if (localStorage.getItem("userJWT") == null) {
+      window.location.reload(false);
+      window.location.replace("/login");
+    } else {
+      this.getUserData();
+      toast.configure({
+        rtl: true,
+        className: "text-center",
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+    }
   }
 
   updateCartCommoditiesCount(commodityID, count) {
@@ -178,9 +185,13 @@ class User extends Component {
   addCreditToUser = (event, value) => {
     event.preventDefault();
     axios
-      .post("/user/addCredit", {
-        credit: value,
-      })
+      .post(
+        "/user/addCredit",
+        {
+          credit: value,
+        },
+        { headers: { Authorization: localStorage.getItem("userJWT") } }
+      )
       .then((resp) => {
         if (resp.status === 200) {
           this.setState((prevState) => {

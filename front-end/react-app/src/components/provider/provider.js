@@ -25,70 +25,14 @@ class Provider extends Component {
         providerImage: "",
       },
       providedCommodities: [],
-      // itemsEx: [
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 1,
-      //     image: img,
-      //   },
-      //   {
-      //     id: 1,
-      //     name: "Huawei nova 9",
-      //     price: 300,
-      //     inStock: 0,
-      //     image: img,
-      //   },
-      // ],
     };
   }
 
   getBalootProvider() {
     axios
-      .get(`providers/${this.props.match.params.providerId}`)
+      .get(`providers/${this.props.match.params.providerId}`, {
+        headers: { Authorization: localStorage.getItem("userJWT") },
+      })
       .then((resp) => {
         if (resp.status === 200) {
           let providedCommoditiesId = [];
@@ -139,10 +83,15 @@ class Provider extends Component {
   }
 
   componentDidMount() {
-    this.getBalootProvider();
-    const title = `provider : ${this.state.providerInfo.providerName}`;
-    document.title = title;
-    // document.body.classList.add("bg-light");
+    if (localStorage.getItem("userJWT") == null) {
+      window.location.reload(false);
+      window.location.replace("/login");
+    } else {
+      this.getBalootProvider();
+      const title = `provider : ${this.state.providerInfo.providerName}`;
+      document.title = title;
+      // document.body.classList.add("bg-light");
+    }
   }
 
   render() {

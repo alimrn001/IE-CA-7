@@ -37,7 +37,9 @@ class Product extends Component {
 
   getBalootCommodity() {
     axios
-      .get(`commodities/${this.props.match.params.productId}`)
+      .get(`commodities/${this.props.match.params.productId}`, {
+        headers: { Authorization: localStorage.getItem("userJWT") },
+      })
       .then((resp) => {
         if (resp.status === 200) {
           let categories = [];
@@ -92,18 +94,22 @@ class Product extends Component {
   }
 
   componentDidMount() {
-    console.log("id : ", this.props.match.params.productId);
-    this.getBalootCommodity();
-    const title = this.state.ProductDetailsEX.productName;
-    document.title = title;
-    document.body.classList.add("bg-light");
-    toast.configure({
-      rtl: true,
-      className: "text-center",
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 5000,
-      closeOnClick: true,
-    });
+    if (localStorage.getItem("userJWT") == null) {
+      window.location.reload(false);
+      window.location.replace("/login");
+    } else {
+      this.getBalootCommodity();
+      const title = this.state.ProductDetailsEX.productName;
+      document.title = title;
+      document.body.classList.add("bg-light");
+      toast.configure({
+        rtl: true,
+        className: "text-center",
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+    }
   }
 
   handlePostComment = (event, text) => {
@@ -115,6 +121,9 @@ class Product extends Component {
         {
           commodity: this.props.match.params.productId,
           text: text,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
         }
       )
       .then((resp) => {
@@ -123,10 +132,10 @@ class Product extends Component {
         }
       })
       .catch((error) => {
-        if (error.status === 401) {
+        if (error.response.status === 401) {
           window.location.href = "http://localhost:3000/login";
         } else {
-          window.location.href = "http://localhost:3000/badrequst";
+          window.location.href = "http://localhost:3000/badrequest";
         }
       });
   };
@@ -139,6 +148,9 @@ class Product extends Component {
         {
           commentId: commentId,
           value: value,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
         }
       )
       .then((resp) => {
@@ -147,10 +159,11 @@ class Product extends Component {
         }
       })
       .catch((error) => {
-        if (error.status === 401) {
+        console.log(error.response.status);
+        if (error.response.status === 401) {
           window.location.href = "http://localhost:3000/login";
         } else {
-          window.location.href = "http://localhost:3000/badrequst";
+          window.location.href = "http://localhost:3000/badrequest";
         }
       });
   };
@@ -162,6 +175,9 @@ class Product extends Component {
         `http://localhost:8888/commodities/${this.props.match.params.productId}/addToBuyList`,
         {
           quantity: 1,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
         }
       )
       .then((resp) => {
@@ -175,7 +191,11 @@ class Product extends Component {
         if (error.response.status === 403) {
           toast.error("Item not available in stock");
         } else {
-          window.location.href = "http://localhost:3000/badrequest";
+          if (error.response.status === 401) {
+            window.location.href = "http://localhost:3000/login";
+          } else {
+            window.location.href = "http://localhost:3000/badrequest";
+          }
         }
       });
   };
@@ -187,6 +207,9 @@ class Product extends Component {
         `http://localhost:8888/commodities/${this.props.match.params.productId}/rate`,
         {
           value: value,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
         }
       )
       .then((resp) => {
@@ -203,7 +226,11 @@ class Product extends Component {
         if (error.response.status === 403) {
           toast.error("Rating must be between 0 to 10");
         } else {
-          window.location.href = "http://localhost:3000/badrequest";
+          if (error.response.status === 401) {
+            window.location.href = "http://localhost:3000/login";
+          } else {
+            window.location.href = "http://localhost:3000/badrequest";
+          }
         }
       });
   };

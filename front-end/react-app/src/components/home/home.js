@@ -40,7 +40,6 @@ class Home extends Component {
   getBalootCommodities() {
     axios
       .get("/", {
-        // headers: { Authorization: `Bearer ${localStorage.getItem("userJWT")}` },
         headers: { Authorization: localStorage.getItem("userJWT") },
       })
       .then((resp) => {
@@ -84,10 +83,16 @@ class Home extends Component {
   handleSort = (task) => {
     console.log("sorting by name");
     axios
-      .post("/", {
-        task: task,
-        value: "",
-      })
+      .post(
+        "/",
+        {
+          task: task,
+          value: "",
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
+        }
+      )
       .then((resp) => {
         if (resp.status === 200) {
           let tmp = [];
@@ -118,10 +123,16 @@ class Home extends Component {
       searchField = "searchByCategory";
     }
     axios
-      .post("/", {
-        task: searchField,
-        value: value,
-      })
+      .post(
+        "/",
+        {
+          task: searchField,
+          value: value,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("userJWT") },
+        }
+      )
       .then((resp) => {
         // window.location.href = "http://localhost:3000/badrequest";
         console.log(resp.status);
@@ -144,35 +155,6 @@ class Home extends Component {
   };
 
   render() {
-    // const {
-    //   availabaleFlag,
-    //   loggedInUser,
-    //   itemsEx,
-    //   currentPage,
-    //   commoditiesPerPage,
-    // } = this.state;
-
-    // console.log(currentPage + " is page no");
-    // // Logic for displaying todos
-    // const indexOfLastItem = currentPage * commoditiesPerPage;
-    // const indexOfFirstItem = indexOfLastItem - commoditiesPerPage;
-    // const currentCommodities = itemsEx.slice(indexOfFirstItem, indexOfLastItem);
-    // const pageCnt = Math.ceil(itemsEx.length / commoditiesPerPage);
-
-    // // Logic for displaying page numbers
-    // const pageNumbers = [];
-    // for (let i = 1; i <= Math.ceil(itemsEx.length / commoditiesPerPage); i++) {
-    //   pageNumbers.push(i);
-    // }
-
-    // const renderPageNumbers = pageNumbers.map((number) => {
-    //   return (
-    //     <button key={number} id={number} onClick={this.handlePageChange}>
-    //       {number}
-    //     </button>
-    //   );
-    // });
-
     return (
       <div>
         <Nav onSearch={this.handleSearch} />
