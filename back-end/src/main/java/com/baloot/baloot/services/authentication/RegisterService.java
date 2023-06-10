@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 @Service
 public class RegisterService {
     @Autowired
-    BalootService balootService;
+    private BalootService balootService;
 
     public String registerUser(String username, String password, String email, String birthdate, String address) throws Exception {
         if(balootService.usernameExists(username))

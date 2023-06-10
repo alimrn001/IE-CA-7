@@ -324,6 +324,18 @@ public class BalootService {
         userRepository.save(user);
     }
 
+    public void updateUser(String username, String password, String birthDate, String email, String address) throws Exception {
+        checkUsernameValidity(username); //or maybe not cause it's actually from github !
+        User user = userRepository.getUserByUsername(username); //can also be done by email but username is better
+        LocalDate birth = LocalDate.parse(birthDate);
+        String hashedPassword = HashString.hashString(password);
+        user.setPassword(hashedPassword);
+        user.setBirthDate(birth);
+        user.setEmail(email); //probably not needed since email must also be unique !
+        user.setAddress(address);
+        userRepository.save(user);
+    }
+
     public void addCreditToUser(User user, int credit) {
         user.addCredit(credit);
         userRepository.save(user); //exceptions handled in service layer !
