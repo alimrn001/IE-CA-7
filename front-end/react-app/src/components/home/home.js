@@ -39,10 +39,13 @@ class Home extends Component {
 
   getBalootCommodities() {
     axios
-      .get("/")
+      .get("/", {
+        // headers: { Authorization: `Bearer ${localStorage.getItem("userJWT")}` },
+        headers: { Authorization: localStorage.getItem("userJWT") },
+      })
       .then((resp) => {
         if (resp.status === 200) {
-          // console.log("logged in user : ", resp.data.loggedInUsername);
+          console.log("logged in user : ", localStorage.getItem("userEmail"));
           let tmp = [];
           Object.keys(resp.data.commodities).forEach((property) => {
             // console.log(resp.data[property]);
@@ -68,8 +71,14 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    document.title = "Baloot";
-    this.getBalootCommodities();
+    console.log(localStorage.getItem("userJWT"));
+    if (localStorage.getItem("userJWT") == null) {
+      window.location.reload(false);
+      window.location.replace("/login");
+    } else {
+      document.title = "Baloot";
+      this.getBalootCommodities();
+    }
   }
 
   handleSort = (task) => {
@@ -86,7 +95,6 @@ class Home extends Component {
             tmp.push(item);
           });
           this.setState({
-            // itemsEx: [],
             itemsEx: tmp,
           });
           console.log(resp.data);

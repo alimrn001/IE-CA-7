@@ -12,6 +12,8 @@ class Logout extends Component {
       .post("/logout")
       .then((resp) => {
         if (resp.status === 200) {
+          localStorage.removeItem("userJWT");
+          localStorage.removeItem("userEmail");
           window.location.href = "http://localhost:3000/login";
         }
       })

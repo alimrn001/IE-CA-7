@@ -57,9 +57,14 @@ class Login extends Component {
       )
       .then((resp) => {
         if (resp.status === 200) {
-          console.log(resp.headers.authorization);
+          console.log(resp.headers.authorization.split(" ")[1]);
           console.log(resp.headers.useremail);
-          // window.location.href = "http://localhost:3000/";
+          localStorage.setItem(
+            "userJWT",
+            resp.headers.authorization.split(" ")[1]
+          );
+          localStorage.setItem("userEmail", resp.headers.useremail);
+          window.location.href = "http://localhost:3000/";
         }
       })
       .catch((error) => {

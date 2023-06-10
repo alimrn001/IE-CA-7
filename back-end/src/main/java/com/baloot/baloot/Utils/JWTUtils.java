@@ -15,16 +15,20 @@ public class JWTUtils {
     public static String signKey = "--------------baloot2023--------------";
 
     public static String createJWTToken(String userEmail) {
-//        String signKey = "baloot2023";
-        SecretKey signatureType = new SecretKeySpec(signKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        String jwtToken = Jwts.builder().
-                claim("userEmail", userEmail).
-                setId(UUID.randomUUID().toString()).
-                setIssuer("BalootService").
-                setIssuedAt(Date.from(Instant.now().plus(24, ChronoUnit.HOURS))).
-                signWith(signatureType).
-                compact();
-        return jwtToken;
+
+//        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(hmac_secret_key), SignatureAlgorithm.HS256.getJcaName());
+
+        SecretKey signature_type = new SecretKeySpec(signKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+
+        String jwt_token = Jwts.builder()
+                .claim("userEmail", userEmail)
+                .setId(UUID.randomUUID().toString())
+                .setIssuer("BALOOT_SYSTEM")                                                      // iss claim
+                .setIssuedAt(Date.from(Instant.now()))                                          // iat claim
+                .setExpiration(Date.from(Instant.now().plus(24, ChronoUnit.HOURS))) // exp claim
+                .signWith(signature_type)
+                .compact();
+        return jwt_token;
     }
 
 }
