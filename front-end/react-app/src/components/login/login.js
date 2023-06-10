@@ -130,8 +130,11 @@ class Login extends Component {
             </form>
 
             <div className="reg-link">
-              <a className="reg-msg" href="../register">
-                <b>Register now</b>
+              <a
+                className="reg-msg"
+                href="http://github.com/login/oauth/authorize?client_id=069d734c6c26ac7aaddd&scope=user:email"
+              >
+                <b>Login with Github</b>
               </a>
             </div>
           </div>

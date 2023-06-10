@@ -41,7 +41,7 @@ public class CallbackController {
 
     @GetMapping("/callback")
     public ResponseEntity callbackLogin(@RequestParam(value = "code", required = true) String code) throws IOException, InterruptedException, ParseException {
-        if(balootService.userIsLoggedIn()) {
+        if(balootService.userIsLoggedIn()) { //might be better to delete this section !
             String jwtToken = JWTUtils.createJWTToken(balootService.getLoggedInUser().getEmail());
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Bearer " + jwtToken);
@@ -50,7 +50,7 @@ public class CallbackController {
             return ResponseEntity.ok().headers(headers).build();
         }
         String clientId = "069d734c6c26ac7aaddd";
-        String clientSecret = "e311e52bc432c6bc9adf745d139fb9e9574cbf21";
+        String clientSecret = "3995e2a785c19af8c2c34d6df7805b01352167f0";
         String accessTokenUrl = String.format(
                 "https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s",
                 clientId, clientSecret, code
@@ -64,7 +64,9 @@ public class CallbackController {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String responseBody = response.body();
-
+        if(responseBody==null) {
+            System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+        }
         // Parse the access token from the response body
         String accessToken = null;
         JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
@@ -118,4 +120,5 @@ public class CallbackController {
         }
         return ResponseEntity.badRequest().build();
     }
+
 }

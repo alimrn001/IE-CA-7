@@ -51,7 +51,7 @@ public class JWTAuthFilter implements Filter {
 
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        if (req.getServletPath().contains("login") || req.getServletPath().contains("register") || req.getServletPath().contains("logout")) {
+        if (req.getServletPath().contains("login") || req.getServletPath().contains("register") || req.getServletPath().contains("logout") || req.getServletPath().contains("callback")) {
             chain.doFilter(request, response);
             return;
         }

@@ -13,6 +13,7 @@ import Provider from "./components/provider/provider";
 import Logout from "./components/logout/logout";
 import Register from "./components/register/register";
 import Login from "./components/login/login";
+import Callback from "./components/callback/callback";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
 
         <Route path="/register">
           <Register />
+        </Route>
+
+        <Route path="/callback">
+          <Callback />
         </Route>
 
         <Route path="/commodities/:productId" component={Product} />
